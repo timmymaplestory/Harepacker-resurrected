@@ -626,12 +626,23 @@
                         <Grid>
                             <!-- Source="pack://siteoforigin:,,,/Resources/ladyboss_test_attack2_0.png" -->
                             <!-- Source="{Binding Image}"  -->
-                            <Image x:Name="canvasPropBox" 
-                               Source="{Binding Image}"  
-                                   SnapsToDevicePixels="True" UseLayoutRounding="True" 
-                                   RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
-                                   
-                               Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="-1"
+      Margin="{Binding CanvasVectorOrigin, Converter={StaticResource vectorOriginConverter}}">
+    <Rectangle Width="50" Height="90" Fill="#808080" Opacity="0.5" Margin="-25,-90,0,0" 
+               VerticalAlignment="Top" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+</Grid>
+
+<Grid HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="10"
+      Margin="{Binding CanvasVectorLt, Converter={StaticResource vectorOriginConverter}}">
+    <Ellipse Width="8" Height="8" Fill="Red" Stroke="White" StrokeThickness="1" Margin="-4,-4,0,0" 
+             VerticalAlignment="Top" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+</Grid>
+
+<Image x:Name="canvasPropBox" 
+       Source="{Binding Image}"  
+       SnapsToDevicePixels="True" UseLayoutRounding="True" 
+       RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
+       Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                             <!-- Click draggable borders-->
                             <Grid
