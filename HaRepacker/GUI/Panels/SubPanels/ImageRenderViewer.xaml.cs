@@ -18,7 +18,12 @@ namespace HaRepacker.GUI.Panels.SubPanels
 {
     public partial class ImageRenderViewer : UserControl
     {
-        private bool isLoading = false;
+        
+		
+		private bool _isDragging = false;
+private Point _lastMousePoint;
+		
+		private bool isLoading = false;
         private MainPanel mainPanel;
         private ImageRenderViewerItem _bindingPropertyItem = new ImageRenderViewerItem();
 
@@ -66,22 +71,58 @@ namespace HaRepacker.GUI.Panels.SubPanels
         // ==========================================
         // 補上這三個滑鼠事件，騙過編譯器 (Start)
         // ==========================================
-        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            // 這裡留空，暫時不需要拖曳邊框功能，只要能編譯就好
-        }
-
-        private void Rectangle_MouseMove(object sender, MouseEventArgs e) {
-            // 這裡留空
-        }
-
-        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            // 這裡留空
-        }
+// ==========================================
+        // 這是修改後：有實際功能的滑鼠拖曳事件
         // ==========================================
-        // 補上這三個滑鼠事件，騙過編譯器 (End)
-        // ==========================================
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var element = sender as FrameworkElement;
+            if (element != null)
+            {
+                _isDragging = true;
+                _lastMousePoint = e.GetPosition(this); // 紀錄滑鼠按下的位置
+                element.CaptureMouse(); // 鎖定滑鼠，確保拖曳時游標不會跑掉
+                e.Handled = true;
+            }
+        }
 
-        // 這些是介面需要的過濾器按鈕功能，補上以防萬一
+        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isDragging)
+            {
+                // 1. 計算滑鼠移動的距離
+                Point currentPoint = e.GetPosition(this);
+                double deltaX = currentPoint.X - _lastMousePoint.X;
+                double deltaY = currentPoint.Y - _lastMousePoint.Y;
+
+                // 2. 取得目前的縮放比例 (Zoom)，不然放大圖片時拖曳速度會變很奇怪
+                double zoom = ZoomSlider.Value;
+                if (zoom <= 0) zoom = 1;
+
+                // 3. 更新數據 (這裡將移動量除以縮放倍率，加到 CanvasVectorLt 上)
+                if (_bindingPropertyItem != null && _bindingPropertyItem.CanvasVectorLt != null)
+                {
+                    _bindingPropertyItem.CanvasVectorLt.X += (int)(deltaX / zoom);
+                    _bindingPropertyItem.CanvasVectorLt.Y += (int)(deltaY / zoom);
+                }
+
+                // 4. 更新最後位置，為下一次計算做準備
+                _lastMousePoint = currentPoint;
+            }
+        }
+
+        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isDragging)
+            {
+                _isDragging = false;
+                var element = sender as FrameworkElement;
+                if (element != null)
+                {
+                    element.ReleaseMouseCapture(); // 釋放滑鼠
+                }
+            }
+        }
         private void MyColorCanvas_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e) { }
         private void button_filter_apply_Click(object sender, RoutedEventArgs e) { }
         private void button_filter_reset_Click(object sender, RoutedEventArgs e) { }
