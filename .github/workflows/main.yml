@@ -13,7 +13,7 @@ jobs:
       - name: 2. 安裝 .NET 環境
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x' # 改成 10.0 以符合你的專案設定
 
       - name: 3. 修復連結
         run: dotnet restore MapleHaSuite.sln
@@ -24,5 +24,6 @@ jobs:
       - name: 5. 打包上傳成品
         uses: actions/upload-artifact@v4
         with:
-          name: HaRepacker-Visual-Edition
-          path: "**/bin/Release/net8.0-windows/"
+          name: HaRepacker-Complete-Package # 換個名字，避免跟舊的混淆
+          # 這裡改成抓取所有 Release 下的內容，這樣絕對不會漏掉 .exe
+          path: "**/bin/Release/"
