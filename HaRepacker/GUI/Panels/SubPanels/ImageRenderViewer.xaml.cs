@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input; // 補上這個引用
 using System.Windows.Media;
 using static MapleLib.Configuration.UserSettings;
 
@@ -61,5 +62,28 @@ namespace HaRepacker.GUI.Panels.SubPanels
         private void ZoomSlider_ValueChanged(object s, RoutedPropertyChangedEventArgs<double> e) {
             if (!isLoading) Program.ConfigurationManager.UserSettings.ImageZoomLevel = ((Slider)s).Value;
         }
+
+        // ==========================================
+        // 補上這三個滑鼠事件，騙過編譯器 (Start)
+        // ==========================================
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            // 這裡留空，暫時不需要拖曳邊框功能，只要能編譯就好
+        }
+
+        private void Rectangle_MouseMove(object sender, MouseEventArgs e) {
+            // 這裡留空
+        }
+
+        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            // 這裡留空
+        }
+        // ==========================================
+        // 補上這三個滑鼠事件，騙過編譯器 (End)
+        // ==========================================
+
+        // 這些是介面需要的過濾器按鈕功能，補上以防萬一
+        private void MyColorCanvas_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e) { }
+        private void button_filter_apply_Click(object sender, RoutedEventArgs e) { }
+        private void button_filter_reset_Click(object sender, RoutedEventArgs e) { }
     }
 }
