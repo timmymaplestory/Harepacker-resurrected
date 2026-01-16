@@ -21,7 +21,7 @@ namespace HaRepacker.GUI.Panels.SubPanels
         
 		
 		private bool _isDragging = false;
-private Point _lastMousePoint;
+private System.Windows.Point _lastMousePoint;
 		
 		private bool isLoading = false;
         private MainPanel mainPanel;
@@ -91,7 +91,7 @@ private Point _lastMousePoint;
             if (_isDragging)
             {
                 // 1. 計算滑鼠移動的距離
-                Point currentPoint = e.GetPosition(this);
+               System.Windows.Point currentPoint = e.GetPosition(this);
                 double deltaX = currentPoint.X - _lastMousePoint.X;
                 double deltaY = currentPoint.Y - _lastMousePoint.Y;
 
